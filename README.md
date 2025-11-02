@@ -1,24 +1,31 @@
-Install, self-host, deploy and expose safely a wordpress server on your Android phone
-tested on a Pixel 6a Beta build BP41.250916.012
-you will required a cloudflared account sign up for free here https://dash.cloudflare.com/sign-up or log in here https://dash.cloudflare.com/login
+# Self-Host WordPress on Android with Cloudflare Tunnel
 
-Requirements:
-- Cloudflare Account
-- Active Cloudflare domain
-- Cloudflare API Token with these permissions -> <img width="913" height="610" alt="cloudflare_API_TOKEN" src="https://github.com/user-attachments/assets/b23feefe-7a7c-41b3-9d63-d1b5fd112e76" />
-- Android Phone running Android 15 or latest
+This repository provides a single script that installs Docker, MariaDB, WordPress, and Cloudflared on an Android device running the Linux Development Environment (LDE). Once configured, the stack runs under systemd so your site comes online whenever you open the Terminal app. Tested on a Pixel 6a (Android 15 Beta build BP41.250916.012), but it should work on any device with LDE support.
 
-on android phone:
-1. Go to Settings > About Phone > Build Number (tap 7 times real fast -> You are now a developer!)
-2. Go to Settings > System > Developer options > Linux development environment > (toggle ON)
-3. Pull your apps drawer and search for "Terminal" > launch "Terminal" app > Allow app to send notifications > Tap "Install" (bottom right button)
-4. Wait a couple seconds until the terminal fully initializes > You should see text in a green font like "droid@debian:~$"
-5. Type or copy/paste the following commands and press enter:
-     ```bash
-     sudo apt update;sudo apt upgrade -y;sudo apt install -y curl;curl -fsSL https://raw.githubusercontent.com/charettep/lde-scripts/main/wp+cf.sh -o /tmp/wp+cf.sh;chmod +x /tmp/wp+cf.sh;sudo /tmp/wp+cf.sh
-     ```
-6. The script will launch and prompt you to enter your Cloudflare API Token (with permissions as show here). Paste your token and press Enter
-7. The script will prompt you to enter the hostname where you wish your Wordpress website to be publicly accessible. Enter full hostname, including subdomain (must be on a base domain active in your CF account), example: blog.charettep.com where charettep.com is my domain active in my cloudflare account. Then press Enter, and watch the magic happen :)
-8. Stay alert and pay attention to your screen, as the script will need to open ports for docker, mariadb and cloudflared. As soon as you see the prompts, tap "Allow" or the script may break if you dont allow port access in time
-9. Once the script is done, you can go to your chosen hostname from any browser on any device with internet access to complete the 5seconds wordpress initial setup.
-10. The whole stack is install as systemd service, so all you have to do to bring your website up or down, is open/close your "Terminal" app.
+## Requirements
+- Cloudflare account (free tiers work)
+- Active domain managed by Cloudflare
+- Cloudflare API token with the permissions shown in this screenshot: <img width="913" height="610" alt="cloudflare_API_TOKEN" src="https://github.com/user-attachments/assets/b23feefe-7a7c-41b3-9d63-d1b5fd112e76" />
+- Android phone running Android 15 or later with the Linux Development Environment feature
+
+## Prepare Your Android Device
+1. Open **Settings → About Phone → Build Number**, then tap the build number seven times quickly to enable developer options.
+2. Navigate to **Settings → System → Developer options → Linux development environment** and toggle it **ON**.
+3. Open the app drawer, launch the **Terminal** app, allow its notifications, and tap **Install** in the bottom-right corner.
+4. Wait until the terminal finishes setting up; you should see a green prompt similar to `droid@debian:~$`.
+
+## Run the Installer
+1. Paste the following command into the terminal and press **Enter**:
+
+    ```bash
+    sudo apt update; sudo apt upgrade -y; sudo apt install -y curl; curl -fsSL https://raw.githubusercontent.com/charettep/lde-scripts/main/wp+cf.sh -o /tmp/wp+cf.sh; chmod +x /tmp/wp+cf.sh; sudo /tmp/wp+cf.sh
+    ```
+
+2. When prompted, paste your Cloudflare API token (it must match the permissions shown above) and press **Enter**.
+3. Enter the full hostname where you want your WordPress site to be reachable—for example `blog.example.com`—and press **Enter**. Make sure the base domain is active in your Cloudflare account.
+4. Approve each system prompt to open network ports for Docker, MariaDB, and Cloudflared. Declining these prompts will interrupt the installation.
+
+## After Installation
+- Visit the hostname you provided from any browser to complete WordPress’s initial setup wizard (takes about five seconds).
+- The services are registered as systemd units, so the site starts whenever the Terminal app is open and stops when you close it.
+- Re-run the script any time you need to update or reinstall the stack; it is safe to execute multiple times.
