@@ -34,6 +34,11 @@ apt_update_once() {
   fi
 }
 
+apt_update_force() {
+  APT_UPDATED=0
+  apt_update_once
+}
+
 install_pkg() {
   local pkg="$1"
   if ! dpkg -s "$pkg" >/dev/null 2>&1; then
@@ -93,14 +98,20 @@ if ! command -v docker >/dev/null 2>&1; then
   fi
 
   DOCKER_LIST=/etc/apt/sources.list.d/docker.list
+  DOCKER_REPO_ADDED=0
   if [ ! -f "$DOCKER_LIST" ]; then
     CODENAME=$(lsb_release -cs)
     ARCH=$(dpkg --print-architecture)
     echo "deb [arch=${ARCH} signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/debian ${CODENAME} stable" | \
       run_sudo tee "$DOCKER_LIST" >/dev/null
+    DOCKER_REPO_ADDED=1
   fi
 
-  apt_update_once
+  if [ "$DOCKER_REPO_ADDED" -eq 1 ]; then
+    apt_update_force
+  else
+    apt_update_once
+  fi
   # primary attempt: official docker packages
   if ! run_sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin 2>/dev/null; then
     # fallback to distro docker
@@ -274,10 +285,16 @@ if ! command -v cloudflared >/dev/null 2>&1; then
   if [ ! -f /usr/share/keyrings/cloudflare-public-v2.gpg ]; then
     curl -fsSL https://pkg.cloudflare.com/cloudflare-public-v2.gpg | run_sudo tee /usr/share/keyrings/cloudflare-public-v2.gpg >/dev/null
   fi
+  CLOUDFLARED_REPO_ADDED=0
   if [ ! -f /etc/apt/sources.list.d/cloudflared.list ]; then
     echo 'deb [signed-by=/usr/share/keyrings/cloudflare-public-v2.gpg] https://pkg.cloudflare.com/cloudflared any main' | run_sudo tee /etc/apt/sources.list.d/cloudflared.list >/dev/null
+    CLOUDFLARED_REPO_ADDED=1
   fi
-  apt_update_once
+  if [ "$CLOUDFLARED_REPO_ADDED" -eq 1 ]; then
+    apt_update_force
+  else
+    apt_update_once
+  fi
   run_sudo apt-get install -y cloudflared
 fi
 
