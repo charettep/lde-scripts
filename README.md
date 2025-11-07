@@ -1,6 +1,6 @@
 # Autonomous Bash Scripts for the Android Linux Development Environment (LDE) Developer Options Feature
 
-### Self-Host WordPress on Android with Cloudflare Tunnel
+### <Self-Host WordPress on Android with Cloudflare Tunnel>
 
 This repository provides a single script that installs Docker, MariaDB, WordPress, and Cloudflared on an Android device running the Linux Development Environment (LDE). Once configured, the stack runs under systemd so your site comes online whenever you open the Terminal app. Tested on a Pixel 6a (Android 15 Beta build BP41.250916.012), but it should work on any device with LDE support.
 
