@@ -20,7 +20,7 @@ This repository provides a single script that installs Docker, MariaDB, WordPres
 1. Paste the following command into the terminal and press **Enter**:
 
     ```bash
-    sudo apt update; sudo apt upgrade -y; sudo apt install -y curl; curl -fsSL https://raw.githubusercontent.com/charettep/lde-scripts/main/wp+cf.sh -o /tmp/wp+cf.sh; chmod +x /tmp/wp+cf.sh; sudo /tmp/wp+cf.sh
+    sudo apt update; sudo apt upgrade -y; sudo apt install -y curl; curl -fsSL https://raw.githubusercontent.com/charettep/Wordpress-on-Android/main/wp+cf.sh -o /tmp/wp+cf.sh; chmod +x /tmp/wp+cf.sh; sudo /tmp/wp+cf.sh
     ```
 
 2. When prompted, paste your Cloudflare API token (it must match the permissions shown above) and press **Enter**.
